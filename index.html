@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanchika Rao — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0d;
+    --bg-alt:#101014;
+    --card:#131319;
+    --text:#f4f2ec;
+    --muted:#8a8a92;
+    --line:#232329;
+    --amber:#f2994a;
+    --cyan:#5ec8d8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber);color:#0a0a0d;}
+
+  a{color:inherit;text-decoration:none;}
+
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- LOADER ---------- */
+  #loader{
+    position:fixed;inset:0;z-index:999;
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:14px;
+    transition:opacity .6s ease, visibility .6s ease;
+  }
+  #loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
+  .loader-text{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14px;color:var(--muted);
+    letter-spacing:.05em;
+  }
+  .loader-text .cursor-blink{
+    display:inline-block;width:8px;height:14px;background:var(--amber);
+    margin-left:4px;animation:blink 1s steps(1) infinite;vertical-align:middle;
+  }
+  .loader-bar{width:200px;height:2px;background:var(--line);position:relative;overflow:hidden;}
+  .loader-bar::after{
+    content:'';position:absolute;left:0;top:0;height:100%;width:40%;
+    background:linear-gradient(90deg,var(--amber),var(--cyan));
+    animation:loadbar 1.1s ease-in-out infinite;
+  }
+  @keyframes loadbar{0%{transform:translateX(-100%);}100%{transform:translateX(350%);}}
+  @keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 5vw;
+    mix-blend-mode:difference;
+  }
+  .logo{
+    font-family:'Archivo Black',sans-serif;
+    font-size:18px;letter-spacing:.02em;
+  }
+  .nav-links{display:flex;gap:32px;font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .nav-links a{opacity:.75;transition:opacity .2s ease;position:relative;}
+  .nav-links a:hover{opacity:1;}
+  .nav-links a::before{content:'// ';color:var(--amber);}
+  @media(max-width:640px){
+    .nav-links{gap:16px;font-size:11px;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    padding:120px 5vw 60px;
+    position:relative;
+  }
+  .hero-eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--amber);
+    font-size:14px;
+    letter-spacing:.08em;
+    margin-bottom:22px;
+  }
+  .hero-eyebrow::before{content:'> ';}
+  .hero-name{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(48px,11vw,150px);
+    line-height:.95;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+  }
+  .hero-sub{
+    margin-top:26px;
+    color:var(--muted);
+    font-size:clamp(14px,1.6vw,18px);
+    max-width:520px;
+  }
+  .scroll-cue{
+    position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    animation:bob 2s ease-in-out infinite;
+  }
+  .scroll-cue span{writing-mode:vertical-rl;letter-spacing:.15em;}
+  .scroll-cue .line{width:1px;height:36px;background:var(--line);position:relative;overflow:hidden;}
+  .scroll-cue .line::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--amber);animation:drip 2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,8px);}}
+  @keyframes drip{0%{top:-100%;}100%{top:100%;}}
+
+  /* ---------- WORDMARK / MORPH SECTION ---------- */
+  .morph{
+    position:relative;
+    padding:80px 5vw 40px;
+    text-align:center;
+    overflow:hidden;
+  }
+  .morph-script{
+    font-family:'Caveat',cursive;
+    font-size:clamp(30px,5vw,54px);
+    color:var(--cyan);
+    display:block;
+    transform:rotate(-3deg);
+  }
+  .morph-wrap{
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .morph-word{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(58px,15vw,220px);
+    line-height:.85;
+    text-transform:uppercase;
+    letter-spacing:-.02em;
+    white-space:nowrap;
+    will-change:transform;
+  }
+  .monogram{
+    position:absolute;
+    width:clamp(140px,22vw,300px);
+    height:clamp(180px,28vw,380px);
+    top:50%;left:50%;
+    transform:translate(-50%,-52%);
+    border-radius:6px;
+    background:linear-gradient(155deg,var(--amber) 0%, var(--card) 55%, var(--cyan) 100%);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.7);
+    z-index:2;
+  }
+  .monogram-inner{
+    font-family:'JetBrains Mono',monospace;
+    font-size:clamp(40px,7vw,72px);
+    font-weight:700;
+    color:var(--bg);
+    letter-spacing:-.02em;
+  }
+  .morph-caption{
+    margin-top:34px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:.08em;
+    display:flex;flex-wrap:wrap;gap:10px 22px;
+    justify-content:center;
+  }
+  .morph-caption b{color:var(--text);font-weight:500;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section-head{
+    padding:100px 5vw 40px;
+    text-align:left;
+  }
+  .section-head h2{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(32px,6vw,64px);
+    text-transform:uppercase;
+    line-height:1;
+  }
+  .section-head .tag{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--amber);
+    font-size:13px;
+    letter-spacing:.08em;
+    margin-bottom:14px;
+    display:block;
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .projects{
+    padding:0 5vw 60px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:24px;
+  }
+  .project-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:34px 28px;
+    display:flex;flex-direction:column;gap:16px;
+    position:relative;
+    overflow:hidden;
+    transition:transform .35s ease, border-color .35s ease;
+    opacity:0;transform:translateY(30px);
+  }
+  .project-card.in-view{opacity:1;transform:translateY(0);}
+  .project-card:hover{transform:translateY(-6px);border-color:var(--amber);}
+  .project-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--amber),var(--cyan));
+    transform:scaleX(0);transform-origin:left;transition:transform .4s ease;
+  }
+  .project-card:hover::before{transform:scaleX(1);}
+  .project-index{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:12px;}
+  .project-card h3{font-family:'Archivo Black',sans-serif;font-size:22px;text-transform:uppercase;}
+  .project-card p{color:var(--muted);font-size:14.5px;line-height:1.6;}
+  .tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .tools span{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    border:1px solid var(--line);border-radius:20px;padding:4px 10px;color:var(--cyan);
+  }
+  .project-links{display:flex;gap:18px;margin-top:auto;padding-top:10px;}
+  .project-links a{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    color:var(--text);border-bottom:1px solid var(--amber);padding-bottom:2px;
+  }
+  .project-links a:hover{color:var(--amber);}
+
+  /* ---------- ABOUT ---------- */
+  .about-transition{
+    text-align:center;padding:120px 5vw 30px;
+  }
+  .about-transition h2{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(30px,6vw,58px);
+    text-transform:uppercase;line-height:1.05;
+    color:var(--muted);
+  }
+  .about-transition h2 b{color:var(--text);}
+
+  .about{
+    padding:40px 5vw 100px;
+    display:grid;
+    grid-template-columns:1fr 1.3fr;
+    gap:50px;
+    align-items:start;
+  }
+  @media(max-width:860px){ .about{grid-template-columns:1fr;} }
+
+  .about-visual{
+    position:sticky;top:110px;
+    display:flex;flex-direction:column;gap:20px;
+  }
+  .about-photo{
+    aspect-ratio:3/4;
+    border-radius:10px;
+    background:linear-gradient(160deg,var(--card),var(--bg-alt));
+    border:1px dashed var(--line);
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;color:var(--muted);
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    padding:20px;
+  }
+  .about-photo .big-initials{
+    font-family:'Archivo Black',sans-serif;
+    font-size:80px;color:var(--line);
+  }
+  .about-bio{color:var(--muted);font-size:15px;line-height:1.75;}
+  .about-bio b{color:var(--text);}
+
+  .resume-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:36px 40px;
+  }
+  @media(max-width:640px){ .resume-grid{grid-template-columns:1fr;} }
+  .resume-block h4{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;letter-spacing:.1em;
+    color:var(--amber);margin-bottom:14px;
+  }
+  .resume-block ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .resume-block li{
+    font-size:14px;color:var(--text);
+    border-bottom:1px solid var(--line);
+    padding-bottom:8px;
+    display:flex;justify-content:space-between;gap:12px;
+  }
+  .resume-block li span.date{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11.5px;white-space:nowrap;}
+  .skill-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .skill-tags span{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:6px;padding:6px 10px;
+  }
+  .resume-block.full{grid-column:1/-1;}
+
+  /* ---------- CONTACT ---------- */
+  .contact{
+    padding:140px 5vw 60px;
+    text-align:center;
+  }
+  .contact h2{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(34px,9vw,110px);
+    text-transform:uppercase;
+    line-height:.95;
+  }
+  .contact h2 .accent{color:var(--amber);font-family:'Caveat',cursive;text-transform:none;font-size:.55em;}
+  .contact-links{
+    margin-top:44px;
+    display:flex;gap:34px;flex-wrap:wrap;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-size:13.5px;
+  }
+  .contact-links a{
+    display:flex;align-items:center;gap:8px;
+    padding:12px 18px;border:1px solid var(--line);border-radius:30px;
+    transition:border-color .25s ease, color .25s ease;
+  }
+  .contact-links a:hover{border-color:var(--cyan);color:var(--cyan);}
+  .contact-email{
+    margin-top:36px;font-size:clamp(16px,2.6vw,24px);
+    font-family:'JetBrains Mono',monospace;
+  }
+  .contact-email a{border-bottom:1px solid var(--amber);}
+
+  footer{
+    padding:30px 5vw 40px;
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
+    border-top:1px solid var(--line);
+    flex-wrap:wrap;gap:10px;
+  }
+
+  /* reveal-on-scroll generic */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-text mono">loading_portfolio.exe<span class="cursor-blink"></span></div>
+  <div class="loader-bar"></div>
+</div>
+
+<nav>
+  <div class="logo">SR<span style="color:var(--amber)">.</span></div>
+  <div class="nav-links">
+    <a href="#work">WORK</a>
+    <a href="#about">ABOUT</a>
+    <a href="#contact">CONTACT</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow mono">computer_science_student</div>
+  <h1 class="hero-name">Sanchika<br>Rao</h1>
+  <p class="hero-sub">AI/ML & Full-Stack Developer turning ideas into intelligent, deployable products.</p>
+  <div class="scroll-cue">
+    <div class="line"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- MORPH / WORDMARK -->
+<section class="morph">
+  <span class="morph-script">Building a</span>
+  <div class="morph-wrap">
+    <span class="morph-word" id="morphWord">PORTFOLIO</span>
+    <div class="monogram" id="monogram">
+      <img src="C:\Users\HP\Desktop\Portfolio\Photo3.png" alt="Avatar" class="monogram-img">
+    </div>
+  </div>
+  <p class="morph-caption mono">
+    <span><b>KIET GROUP OF INSTITUTIONS</b></span>
+    <span>·</span>
+    <span><b>B.TECH</b> COMPUTER SCIENCE &amp; ENGINEERING</span>
+    <span>·</span>
+    <span>FULL-STACK &amp; AI/ML & UI/UX</span>
+  </p>
+</section>
+
+<!-- PROJECTS -->
+<section id="work">
+  <div class="section-head reveal">
+    <span class="tag">&gt; selected_work</span>
+    <h2>My Projects</h2>
+  </div>
+  <div class="projects">
+
+    <div class="project-card">
+      <span class="project-index mono">01</span>
+      <h3>FinTrack AI</h3>
+      <p>OCR-powered expense assistant that extracts receipt data client-side using Tesseract.js, with optimized image preprocessing,google authorisation and persistent MongoDB storage.</p>
+      <div class="tools">
+        <span>React</span><span>Node.js</span><span>MongoDB Atlas</span><span>Tesseract.js</span><span>Tailwind</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/SanchikaRao/FinTrack-AI" target="_blank" rel="noopener">GITHUB ↗</a>
+        <a href="https://smart-expense-tracker-three-iota.vercel.app/" target="_blank" rel="noopener">LIVE SITE ↗</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-index mono">02</span>
+      <h3>HabitFlow</h3>
+      <p>A full-stack habit tracker with interactive dashboards that turn day-to-day routines into visual, actionable insight over time.</p>
+      <div class="tools">
+        <span>Python</span><span>JavaScript</span><span>Data Frameworks</span><span>Git</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/SanchikaRao/Habitflow" target="_blank" rel="noopener">GITHUB ↗</a>
+        <a href="https://habitflow-o71l.onrender.com/" target="_blank" rel="noopener">LIVE SITE ↗</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-index mono">03</span>
+      <h3>Gesture Tic-Tac-Toe</h3>
+      <p>A touchless webcam game — hand-geometry tracking maps skeletal joints to a live grid, so a peace sign plays X and an open hand plays O.</p>
+      <div class="tools">
+        <span>Python</span><span>OpenCV</span><span>MediaPipe</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/SanchikaRao/Gesture-TicTacToe" target="_blank" rel="noopener">GITHUB ↗</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT TRANSITION -->
+<div class="about-transition reveal">
+  <h2>More about <b>Sanchika</b></h2>
+</div>
+
+<!-- ABOUT / RESUME -->
+<section id="about" class="about">
+  <div class="about-visual reveal">
+    <div class="about-photo" style="padding:0;overflow:hidden;border-style:solid;">
+      <img src="C:\Users\HP\Desktop\Portfolio\Photo1.png" alt="Sanchika Rao" style="width:100%;height:100%;object-fit:cover;display:block;">
+    </div>
+    <p class="about-bio"><b>Sanchika Rao</b> is a Computer Science student based in Ghaziabad, Uttar Pradesh, skilled in full-stack web development, data preprocessing, and UI/UX design across the MERN stack, Python, SQL, and Figma. She's focused on turning problem-solving instincts into intuitive, data-driven digital products.</p>
+  </div>
+
+  <div class="resume-grid">
+    <div class="resume-block full">
+      <h4>PROFILE</h4>
+      <p class="about-bio" style="border-bottom:1px solid var(--line);padding-bottom:16px;">Focused on leveraging problem-solving skills to build scalable applications and intuitive, data-driven digital experiences.</p>
+    </div>
+
+    <div class="resume-block">
+      <h4>EDUCATION</h4>
+      <ul>
+        <li>B.Tech, Computer Science &amp; Engineering<br>KIET Group of Institutions <span class="date">2025–Present</span></li>
+        <li>Central Board of Secondary Education<br>Ingraham English Medium School <span class="date">2024</span></li>
+      </ul>
+    </div>
+
+    <div class="resume-block">
+      <h4>EXPERIENCE</h4>
+      <ul>
+        <li>AI Data Analyst Intern<br>Inamigos Foundation <span class="date">Jun 2026</span></li>
+        <li>AI/ML &amp; UI/UX Member<br>KTS Club, KIET <span class="date">2025–Present</span></li>
+      </ul>
+    </div>
+
+    <div class="resume-block">
+      <h4>HARD SKILLS</h4>
+      <div class="skill-tags">
+        <span>React.js</span><span>Node.js</span><span>REST APIs</span><span>SQL / MySQL</span>
+        <span>Python</span><span>OpenCV</span><span>Tesseract.js</span><span>NumPy / Pandas</span>
+        <span>Figma</span><span>Git / GitHub</span>
+      </div>
+    </div>
+
+    <div class="resume-block">
+      <h4>SOFT SKILLS</h4>
+      <div class="skill-tags">
+        <span>Leadership</span><span>Team Collaboration</span><span>Blogging</span><span>Problem Solving</span>
+      </div>
+    </div>
+
+    <div class="resume-block full">
+      <h4>CERTIFICATIONS &amp; ACHIEVEMENTS</h4>
+      <ul>
+        <li>GirlScript Summer of Code (GSSoC) 2026 — Contributor <span class="date"></span></li>
+        <li>Vibe2Ship Hackathon 2026 — Participant <span class="date"></span></li>
+        <li>Infosys Certified Data Science <span class="date"></span></li>
+        <li>Innotech'25, KIET annual technical fest <span class="date"></span></li>
+        <li>Hackathons at NIT Delhi &amp; IGDTUW <span class="date"></span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact reveal">
+  <h2>Let's work<br><span class="accent">together</span></h2>
+  <div class="contact-links">
+    <a href="https://github.com/SanchikaRao" target="_blank" rel="noopener">GITHUB</a>
+    <a href="https://linkedin.com/in/sanchikarao" target="_blank" rel="noopener">LINKEDIN</a>
+  </div>
+  <p class="contact-email"><a href="mailto:sanchikarao@gmail.com">sanchikarao@gmail.com</a></p>
+</section>
+
+<footer>
+  <span>© 2026 Sanchika Rao</span>
+  <span>Ghaziabad, Uttar Pradesh, India</span>
+</footer>
+
+<script>
+  // loader
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hide');
+    }, 500);
+  });
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal, .project-card');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // scroll-linked morph: PORTFOLIO wordmark scales + monogram reveals as section passes through viewport
+  const morphSection = document.querySelector('.morph');
+  const morphWord = document.getElementById('morphWord');
+  const monogram = document.getElementById('monogram');
+
+  function updateMorph(){
+    const rect = morphSection.getBoundingClientRect();
+    const vh = window.innerHeight;
+    // progress: 0 when section top at bottom of viewport, 1 when section bottom at top of viewport
+    let progress = 1 - (rect.bottom / (vh + rect.height));
+    progress = Math.min(Math.max(progress, 0), 1);
+
+    const scale = 0.85 + progress * 0.35;
+    const skew = (0.5 - progress) * 6;
+    morphWord.style.transform = `scale(${scale}) skewX(${skew}deg)`;
+    morphWord.style.opacity = 0.35 + progress * 0.65;
+
+    const monoScale = 0.7 + progress * 0.4;
+    monogram.style.transform = `translate(-50%,-52%) scale(${monoScale}) rotate(${(1-progress)*8}deg)`;
+    monogram.style.opacity = 0.5 + progress * 0.5;
+  }
+  window.addEventListener('scroll', updateMorph, { passive:true });
+  window.addEventListener('resize', updateMorph);
+  updateMorph();
+</script>
+
+</body>
+</html>
