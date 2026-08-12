@@ -86,20 +86,10 @@ computer vision.
 
 ---
 
-### ✈️ AI Trip Planner
-
-An AI-powered travel planning application focused on generating personalized
-travel experiences based on user preferences.
-
-**Status:** 🚧 In Development
-
-🔗 [Repository](YOUR_TRIP_PLANNER_REPOSITORY_URL)
-
----
 
 ## 🛠️ Skills
 
-**Languages:** Python · JavaScript · C
+**Languages:** Python · JavaScript · C · Java
 
 **Frontend:** React.js · HTML · CSS · Tailwind CSS
 
@@ -109,7 +99,7 @@ travel experiences based on user preferences.
 
 **Databases:** MongoDB · Firebase · SQL / MySQL
 
-**Tools:** Git · GitHub · Docker · Figma
+**Tools:** Git · GitHub  · Figma
 
 ---
 
